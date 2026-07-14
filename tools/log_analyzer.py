@@ -19,11 +19,10 @@ class LogAnalyzer:
             {log_content}
             """
         )
-        # Use LCEL to create the chain
         self.chain = self.prompt | self.llm
 
     def analyze(self, log_content):
-        log_content = log_content[:8000]  # trim
+        log_content = log_content[:8000]
         try:
             response = self.chain.invoke({"log_content": log_content})
             parsed = self._parse(response)
