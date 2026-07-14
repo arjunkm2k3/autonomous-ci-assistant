@@ -25,10 +25,14 @@ jobs:
       - name: Setup Ollama
         run: |
           curl -fsSL https://ollama.ai/install.sh | sh
-          ollama pull llama2
+          ollama pull gemma:2b
 
       - name: Ingest knowledge
         run: python ingest_knowledge.py
+
+      - name: Create logs directory
+        if: always()
+        run: mkdir -p logs
 
       - name: Simulate build (fails)
         id: build
