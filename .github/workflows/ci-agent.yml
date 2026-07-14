@@ -77,7 +77,7 @@ jobs:
       - name: Run AI Assistant if build failed
         if: steps.build.outcome == 'failure'
         continue-on-error: true
-        run: python orchestrator.py --source github
+        run: python -W ignore orchestrator.py --source github
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
           REPO_NAME: ${{ github.repository }}
