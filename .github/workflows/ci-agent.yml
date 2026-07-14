@@ -46,8 +46,8 @@ jobs:
           REPO_NAME: ${{ github.repository }}
       
       - name: Upload results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: assistant-logs
-          path: logs/
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: assistant-logs
+    path: logs/s/
