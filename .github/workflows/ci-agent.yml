@@ -25,7 +25,6 @@ jobs:
       - name: Setup Ollama
         run: |
           curl -fsSL https://ollama.ai/install.sh | sh
-          echo "Ollama installed. Starting service..."
           sudo systemctl start ollama
           sudo systemctl status ollama || true
 
