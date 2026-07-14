@@ -68,9 +68,8 @@ jobs:
           exit 1
         continue-on-error: true
 
-      - name: Run AI Assistant if build failed
-  if: steps.build.outcome == 'failure'
-  run: python orchestrator.py --source github
+      - name: Ingest knowledge
+  run: python ingest_knowledge.py
   env:
     GITHUB_TOKEN: ${{ secrets.PAT }}
     REPO_NAME: ${{ github.repository }}
