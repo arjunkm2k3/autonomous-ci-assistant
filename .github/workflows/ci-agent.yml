@@ -25,7 +25,24 @@ jobs:
       - name: Setup Ollama
         run: |
           curl -fsSL https://ollama.ai/install.sh | sh
-          ollama pull gemma:2b
+          echo "Ollama installed. Starting service..."
+          sudo systemctl start ollama
+          sudo systemctl status ollama || true
+
+      - name: Wait for Ollama server to be ready
+        run: |
+          echo "Waiting for Ollama server to start..."
+          for i in {1..30}; do
+            if curl -s http://localhost:11434/api/tags > /dev/null 2>&1; then
+              echo "✅ Ollama server is ready! (Attempt $i)"
+              break
+            fi
+            echo "⏳ Attempt $i/30 - Ollama not ready yet..."
+            sleep 2
+          done
+
+      - name: Pull Ollama model
+        run: ollama pull gemma:2b
 
       - name: Ingest knowledge
         run: python ingest_knowledge.py
