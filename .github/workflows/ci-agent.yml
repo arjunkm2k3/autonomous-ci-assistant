@@ -38,23 +38,27 @@ jobs:
       - name: Wait for Ollama server to be ready
         run: |
           echo "Waiting for Ollama server to start..."
-          for i in {1..30}; do
+          for i in {1..60}; do
             if curl -s http://localhost:11434/api/tags > /dev/null 2>&1; then
               echo "✅ Ollama server is ready! (Attempt $i)"
               break
             fi
-            echo "⏳ Attempt $i/30 - Ollama not ready yet..."
-            sleep 2
+            echo "⏳ Attempt $i/60 - Ollama not ready yet..."
+            sleep 3
           done
 
       - name: Pull Ollama model
         run: ollama pull gemma:2b
 
+      - name: Verify model is available
+        run: ollama list
+
       - name: Ingest knowledge
         run: python ingest_knowledge.py
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
           REPO_NAME: ${{ github.repository }}
+          OLLAMA_MODEL: gemma:2b
 
       - name: Create logs directory
         if: always()
@@ -68,16 +72,17 @@ jobs:
           exit 1
         continue-on-error: true
 
-      - name: Ingest knowledge
-  run: python ingest_knowledge.py
-  env:
-    GITHUB_TOKEN: ${{ secrets.PAT }}
-    REPO_NAME: ${{ github.repository }}
-    OLLAMA_MODEL: gemma:2b
+      - name: Run AI Assistant if build failed
+        if: steps.build.outcome == 'failure'
+        run: python orchestrator.py --source github
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+          REPO_NAME: ${{ github.repository }}
+          OLLAMA_MODEL: gemma:2b
 
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: assistant-logs
-          path: logs
+          path: logs/
