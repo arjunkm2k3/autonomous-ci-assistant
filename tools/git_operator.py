@@ -29,7 +29,7 @@ class GitOperator:
         
         # 3. Open a Pull Request
         pr = self.repo.create_pull(
-            title=f"🤖 AI Fix: {error[:50]}...",
+            title=f" AI Fix: {error[:50]}...",
             body=f"## AI Generated Fix\n\n**Error:** {error}\n\n**Fix:** {suggested_fix}",
             head=branch,
             base=self.base_branch
