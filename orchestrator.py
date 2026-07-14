@@ -13,10 +13,10 @@ def main():
     parser.add_argument("--file", help="Path to log file if source=file")
     parser.add_argument("--no-fix", action="store_true", help="Disable auto-fix")
     args = parser.parse_args()
-    
+
     assistant = CICDAssistant(auto_fix=not args.no_fix)
     metrics = MetricsCollector()
-    
+
     if args.source == "sample":
         log_content = """
         ====== BUILD STARTED ======
@@ -33,21 +33,24 @@ def main():
         ====== BUILD STARTED ======
         ERROR: Could not find a version that satisfies the requirement requests==2.28.0
         """
-    
+
     start = time.time()
     result = assistant.process_failure(log_content)
     duration = time.time() - start
-    
+
     success = result.get("pr") is not None
     error_type = result["analysis"].get("error", "unknown")
     metrics.record(success, error_type, duration)
-    
+
     print(json.dumps(result, indent=2, default=str))
     print(f"\n✅ Done in {duration:.2f}s")
+
     if success:
-        print(f"PR: {result['pr']['pr_url']}")
+        print("\n🎉 Successfully fixed! 🎉")
+        print(f"   PR: {result['pr']['pr_url']}")
+        print("   The AI assistant has fixed the issue automatically.")
     else:
-        print("No PR created (maybe auto-fix was disabled or failed).")
+        print("❌ No PR created (maybe auto-fix was disabled or failed).")
 
 if __name__ == "__main__":
     main()
