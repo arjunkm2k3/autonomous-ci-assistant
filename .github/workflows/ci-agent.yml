@@ -69,15 +69,16 @@ jobs:
         continue-on-error: true
 
       - name: Run AI Assistant if build failed
-        if: steps.build.outcome == 'failure'
-        run: python orchestrator.py --source github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_NAME: ${{ github.repository }}
+  if: steps.build.outcome == 'failure'
+  run: python orchestrator.py --source github
+  env:
+    GITHUB_TOKEN: ${{ secrets.PAT }}
+    REPO_NAME: ${{ github.repository }}
+    OLLAMA_MODEL: gemma:2b
 
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: assistant-logs
-          path: logs/
+          path: logs
