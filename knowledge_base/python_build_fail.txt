@@ -1,0 +1,4 @@
+Issue: Python build fails with ModuleNotFoundError
+Root Cause: Required package not installed in the build environment.
+Solution: Add the missing package to requirements.txt or install it in the Dockerfile.
+Example: requests==2.31.0

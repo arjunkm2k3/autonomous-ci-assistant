@@ -1,0 +1,4 @@
+Issue: npm install fails with EACCES: permission denied
+Root Cause: npm lacks write permissions to the node_modules folder.
+Solution: Use npm install --unsafe-perm or fix ownership in the Dockerfile.
+Example: RUN npm install --unsafe-perm

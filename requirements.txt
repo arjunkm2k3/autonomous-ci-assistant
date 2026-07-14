@@ -1,0 +1,11 @@
+langchain
+langchain-community
+chromadb
+openai
+ollama
+PyGithub
+gitpython
+python-dotenv
+requests
+pydantic
+pytest

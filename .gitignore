@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+.env
+data/
+logs/
+chroma_db/
+*.db
+.DS_Store
+*.pid
+*.pid.lock

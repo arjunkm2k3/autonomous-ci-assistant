@@ -1,0 +1,4 @@
+Issue: Docker build fails with "COPY failed: file not found"
+Root Cause: The file or directory being copied does not exist in the build context.
+Solution: Check the path in the COPY instruction and ensure the file exists.
+Example: COPY ./src /app/src
